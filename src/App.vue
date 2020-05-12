@@ -1,78 +1,58 @@
 <template lang="pug">
   #app
-    img(src="./assets/logo.png")
-    h1 {{ firstname }}
-      input(v-model="name")
-      p {{ name }}
-      br
-      a(:href="url" target="_blank") Click me 
-      br
-      br
-    h1 {{ lastname}}
-      input(v-model="lastName")
-      p {{ lastName }}
-      br
-    h1 {{ msg }}
-      input(v-model="currentAge")
-      br
-      br
-    h1 {{ msg2 }}
-      input(v-model="dob")
-      br
-      span(class="span") {{ calculateActualAge }}
-      br
-      br
-    input(v-model="name1")
-    br
-    br
-    button(@click="format") Format name
-    p {{ formmattedName}}
-
+    pm-header  
+    section.section
+      nav.nav.has-shadow
+        .container
+          input.input.is-large(
+            type="text", 
+            placeholder="searching songs"
+            v-model="searchQuery")
+          a.button.is-info.is-large(@click="search") Search
+          a.button.is-danger.is-large &times
+      .container
+        p 
+          small {{ searchMessage }}
       
-
+      .container.results
+        .columns
+          .column(v-for="t in tracks") 
+            | {{ t.name }} - {{ t.artists[0].name }}
+    pm-footer
 </template>
 
 <script>
+import trackService from "./services/track";
+import PmFooter from "./components/layout/Footer.vue"; // Forma global
+import PmHeader from "./components/layout/Header.vue"; // Forma global
+
 export default {
   name: "App",
   data() {
     return {
-      firstname: "Firts Name",
-      lastname: "Last Name",
-      name: "",
-      lastName: "",
-      url: "https://www.google.com",
-      dob: "",
-      currentAge: "",
-      msg: "Type the year you born",
-      msg2: "Type the current Year",
-      formmattedName: "",
-      name1: ""
+      searchQuery: "",
+      tracks: []
     };
   },
-  components: {},
-  whatch: {
-    dob(newVal, oldVal) {
-      console.log(newVal, oldVal);
-    }
+  components: {
+    PmFooter,
+    PmHeader
   },
+  whatch: {},
   methods: {
-    format() {
-      this.formmattedName = this.name1
-        .split(" ")
-        .join("-")
-        .toUpperCase();
+    search() {
+      if (!this.searchQuery) {
+        return;
+      }
+      trackService.search(this.searchQuery).then(res => {
+        this.tracks = res.tracks.items;
+        //console.log(res);
+      });
     }
-    // showFullName() {
-    //   console.log(`${this.name} ${this.lastName}`);
-    // },
   },
   computed: {
-    showFullName() {
-      return `${this.name} ${this.lastName}`;
-    },
-    calculateActualAge() {
-      return this.dob - this.currentAge;
+    searchMessage() {
+      return `Found: ${this.tracks.length}`;
     }
   }
 };
@@ -80,13 +60,8 @@ export default {
 
 <style lang="scss">
 @import "./scss/main.scss";
-.button {
-  background-color: brown;
-}
-.span {
-  background: chocolate;
-}
-.name {
-  background-color: coral;
+.results {
+  margin-top: 100px;
+  display: flex;
 }
 </style>
