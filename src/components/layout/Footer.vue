@@ -2,7 +2,7 @@
     footer.footer
         .container
             .container.has-text-centered
-                p 😂 i love 💻 coxi
+                p 😂 i love 💻 coxi 
 
 </template>
 
