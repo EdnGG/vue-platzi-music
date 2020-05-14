@@ -1,7 +1,8 @@
 <template lang="pug">
     .container
         content.has-text-centered
-        h1 Cargando...
+        slot(name="loader")
+          h1 Loading...
 </template>
 
 <style lang="scss" scoped>
