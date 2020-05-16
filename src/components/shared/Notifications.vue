@@ -11,3 +11,5 @@
   margin: 10px;
 }
 </style>
+
+// mostrar tambien la cantidad de resultados encoontrados en caso de ///////haberlo hecho
