@@ -13,35 +13,35 @@
 						strong {{ track.name }}
 					p.subtitle.is-6 {{ track.artists[0].name }}
 			.content
-				small {{ track.duration_ms }}
+				small {{ track.duration_ms | ms-to-mm }}
 				nav.level
 					.level-left
-						a.level-item
+						button.level-item.button.is-primary
 							span.icon.is-small(@click="selectTrack") ⏯
-					a.level-item
+						button.level-item.button.is-warning
 							span.icon.is-small(@click="goToTrack(track.id)") 🌌
 </template>
 
 <script>
+import trackMixin from "@/mixins/track.js";
 export default {
+  mixins: [trackMixin],
   // props permite recibir info desde un
   // componente padre a un componente hijo
   // Estos props no deben de ser modificados
   // por componente hijo, sino desde componente padre
   // props es reactivo
   props: {
-    track: { type: Object, required: true },
+    track: { type: Object, required: true }
   },
   methods: {
-    selectTrack() {
-      this.$emit("select", this.track.id);
-
-      this.$bus.$emit("set-track", this.track);
-    },
     goToTrack(id) {
+      if (!this.track.preview_url) {
+        return;
+      }
       this.$router.push({ name: "track", params: { id } });
-    },
-  },
+    }
+  }
 };
 </script>
 

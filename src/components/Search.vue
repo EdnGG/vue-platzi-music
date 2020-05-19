@@ -1,18 +1,20 @@
 <template lang="pug">
   main
+    transition(name="move")
+      pm-notifications(v-show="showNotifications")
+        p(slot="body") Results not Found
 
-    pm-notifications(v-show="showNotifications")
-      p(slot="body") Results not Found
-
-    pm-loader(v-show="isLoading")
-      h1(slot="loader") Loading from component father
+    trasition(name="move")
+      pm-loader(v-show="isLoading")
+      //- h1(slot="loader") Loading from component father
     section.section(v-show="!isLoading")
       nav.nav
         .container
           input.input.is-large(
             type="text",
-            placeholder="Buscar canciones",
-            v-model="searchQuery"
+            placeholder="Search Songs",
+            v-model="searchQuery",
+            @keyup.enter="search"
           )
           a.button.is-info.is-large(@click="search") Buscar
           a.button.is-danger.is-large &times;
@@ -24,6 +26,7 @@
         .columns.is-multiline
           .column.is-one-quarter(v-for="t in tracks")
             pm-track(
+              v-blur="t.preview_url",
               :track="t", 
               @select="setSelectedTrack",
               :class="{ 'is-active': t.id === selectedTrack }"  

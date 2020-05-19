@@ -13,10 +13,6 @@ export default {
   name: "app",
 
   components: { PmFooter, PmHeader },
-
-  computed: {},
-  watch: {},
-  methods: {},
 };
 </script>
 
